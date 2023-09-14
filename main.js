@@ -30,6 +30,7 @@ ball = {
 
 function setup(){
   canvas =  createCanvas(700,550);
+  canvas.parent("canvas");
 }
 
 

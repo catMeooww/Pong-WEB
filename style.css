@@ -8,6 +8,11 @@
 .heading button{
     float: right;
 }
-#start,#status{
+#start,#status,#restart{
     font-size: 22px;
+}
+#footer{
+    background-color: black;
+    color: aliceblue;
+    border-top: 3px ridge white;
 }

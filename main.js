@@ -7,6 +7,9 @@ paddle1Y = '';
 paddle2Y = 685;
 
 noseY = 0;
+rightWristY = 0;
+rightWristX = 0;
+RightWristConfidence = 0;
 
 paddle1Height = 110;
 paddle2Height = 70;
@@ -42,8 +45,7 @@ function setup(){
 
 
 function draw(){
-
-  background(0); 
+  image(video,0,0,700,550)
 
   fill("black");
   stroke("black");
@@ -52,6 +54,11 @@ function draw(){
   fill("black");
   stroke("black");
   rect(0,0,20,700);
+
+if(RightWristConfidence > 0.2){
+  fill("red");
+  circle(rightWristX,rightWristY,20);
+}
 
   //Chamar a função paddleInCanvas() 
   paddleInCanvas();
@@ -88,9 +95,14 @@ function modelLoaded(){
 }
 
 function gotResults(results){
+  if(results.length > 0){
   noseY = results[0].pose.nose.y;
+  rightWristX = results[0].pose.rightWrist.x;
+  rightWristY = results[0].pose.rightWrist.y;
+  RightWristConfidence = results[0].pose.rightWrist.confidence;
   //console.log(results);
-  console.log(noseY);
+  console.log(results);
+  }
 }
 
 //Função reset() para quando a bola não colidir com a raquete

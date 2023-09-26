@@ -16,3 +16,8 @@
     color: aliceblue;
     border-top: 3px ridge white;
 }
+canvas{
+    border-style: ridge;
+    border-color: aliceblue;
+    border-width: 5px;
+}

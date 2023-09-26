@@ -6,6 +6,8 @@ paddle1X = 10;
 paddle1Y = '';
 paddle2Y = 685;
 
+noseY = 0;
+
 paddle1Height = 110;
 paddle2Height = 70;
 
@@ -31,6 +33,11 @@ ball = {
 function setup(){
   canvas =  createCanvas(700,550);
   canvas.parent("canvas");
+  video = createCapture(VIDEO);
+  video.size(700,550);
+  video.hide();
+  poseNet = ml5.poseNet(video,modelLoaded);
+  poseNet.on("pose",gotResults);
 }
 
 
@@ -76,7 +83,15 @@ function draw(){
   move();
 }
 
+function modelLoaded(){
+  console.log("model loaded");
+}
 
+function gotResults(results){
+  noseY = results[0].pose.nose.y;
+  //console.log(results);
+  console.log(noseY);
+}
 
 //Função reset() para quando a bola não colidir com a raquete
 function reset(){

@@ -25,6 +25,7 @@ audio1 = '';
 
 
 //Coordenadas x, y, raio, velocidade em x e velocidade em y
+gameStatus = "";
 ball = {
     x:350/2,
     y:480/2,
@@ -43,6 +44,10 @@ function setup(){
   poseNet.on("pose",gotResults);
 }
 
+function StartGame(){
+  gameStatus = "start";
+  document.getElementById("status").innerHTML = "";
+}
 
 function draw(){
   image(video,0,0,700,550)
@@ -59,7 +64,9 @@ if(RightWristConfidence > 0.2){
   fill("red");
   circle(rightWristX,rightWristY,20);
 }
-
+if(gameStatus == "start"){
+  
+}
   //Chamar a função paddleInCanvas() 
   paddleInCanvas();
 

@@ -7,8 +7,7 @@ paddle1Y = '';
 paddle2Y = 685;
 
 noseY = 0;
-rightWristY = 0;
-rightWristX = 0;
+noseX = 0;
 RightWristConfidence = 0;
 
 paddle1Height = 110;
@@ -34,6 +33,11 @@ ball = {
     dy:3
 }
 
+function preload(){
+  ball_touch = loadSound("ball_touch_paddel.wav");
+  missed = loadSound("missed.wav");
+}
+
 function setup(){
   canvas =  createCanvas(700,550);
   canvas.parent("canvas");
@@ -46,10 +50,11 @@ function setup(){
 
 function StartGame(){
   gameStatus = "start";
-  document.getElementById("status").innerHTML = "";
+  document.getElementById("status").innerHTML = "jogo iniciado";
 }
 
 function draw(){
+  if(gameStatus == "start"){
   image(video,0,0,700,550)
 
   fill("black");
@@ -60,13 +65,9 @@ function draw(){
   stroke("black");
   rect(0,0,20,700);
 
-if(RightWristConfidence > 0.2){
   fill("red");
-  circle(rightWristX,rightWristY,20);
-}
-if(gameStatus == "start"){
-  
-}
+  circle(noseX,noseY,20);
+
   //Chamar a função paddleInCanvas() 
   paddleInCanvas();
 
@@ -74,7 +75,7 @@ if(gameStatus == "start"){
   fill(250,0,0);
   stroke(0,0,250);
   strokeWeight(0.5);
-  paddle1Y = mouseY; 
+  paddle1Y = noseY -30; 
   rect(paddle1X,paddle1Y,paddle1,paddle1Height,100);
 
 
@@ -95,6 +96,7 @@ if(gameStatus == "start"){
 
   //Chamar a função move() (muito importante para o jogo)
   move();
+  }
 }
 
 function modelLoaded(){
@@ -104,9 +106,7 @@ function modelLoaded(){
 function gotResults(results){
   if(results.length > 0){
   noseY = results[0].pose.nose.y;
-  rightWristX = results[0].pose.rightWrist.x;
-  rightWristY = results[0].pose.rightWrist.y;
-  RightWristConfidence = results[0].pose.rightWrist.confidence;
+  noseX = results[0].pose.nose.x;
   //console.log(results);
   console.log(results);
   }
@@ -160,10 +160,12 @@ function move(){
   if (ball.x-2.5*ball.r/2< 0){
   if (ball.y >= paddle1Y&& ball.y <= paddle1Y + paddle1Height) {
     ball.dx = -ball.dx+0.5;
+    ball_touch.play();
     playerscore++;
   }
   else{
     pcscore++;
+    missed.play();
     reset();
     navigator.vibrate(100);
   }
@@ -177,7 +179,7 @@ if(pcscore ==4){
     stroke("white");
     textSize(25)
     text("Game Over!☹☹",width/2,height/2);
-    text("Recarregue a página!",width/2,height/2+30)
+    text("Clique em restart pra reiniciar o jogo",width/2,height/2+30);
     noLoop();
     pcscore = 0;
 }
@@ -186,6 +188,11 @@ if(pcscore ==4){
    }   
 }
 
+function restart(){
+  loop();
+  pcscore = 0;
+  playerscore = 0;
+}
 
 //Largura e altura do canvas e velocidade da bola 
 function models(){
